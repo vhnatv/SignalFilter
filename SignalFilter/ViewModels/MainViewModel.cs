@@ -37,16 +37,16 @@ public partial class MainViewModel : ObservableObject
 
     partial void OnFrequencyFilterChanged(string value)
     {
-
+        RecordsView.Refresh();
     }
     
     partial void OnBandwidthFilterChanged(string value)
     {
-
+        RecordsView.Refresh();
     }
     partial void OnSnrFilterChanged(string value)
     {
-
+        RecordsView.Refresh();
     }
 
     private bool ApplyFilter(object obj)
