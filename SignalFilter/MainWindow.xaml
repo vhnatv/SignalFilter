@@ -4,4 +4,103 @@
         Title="Signal Filter" Height="600" Width="900"
         WindowStartupLocation="CenterScreen">
 
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0 0 0 8">
+            <Button Content="Start" Width="80" Margin="0 0 8 0"
+                    Command="{Binding StartCommand}"
+                    IsEnabled="{Binding IsRunning, Converter={StaticResource InverseBoolConverter}}"/>
+            <Button Content="Stop" Width="80"
+                    Command="{Binding StopCommand}"
+                    IsEnabled="{Binding IsRunning}"/>
+            <TextBlock Margin="16 0 0 0" VerticalAlignment="Center" FontSize="13">
+                <Run Text="Status: "/>
+                <Run Text="{Binding IsRunning, StringFormat={}{0}}"
+                     Foreground="{Binding IsRunning, Converter={StaticResource BoolToBrushConverter}}"/>
+            </TextBlock>
+        </StackPanel>
+
+        <Grid Grid.Row="1" Margin="0 0 0 2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="160"/>
+                <ColumnDefinition Width="130"/>
+                <ColumnDefinition Width="130"/>
+                <ColumnDefinition Width="100"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Column="0" Text="Filter by column:" FontWeight="SemiBold" VerticalAlignment="Center"/>
+            <TextBlock Grid.Column="1" Text="Frequency, MHz" Foreground="Gray" FontSize="11" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <TextBlock Grid.Column="2" Text="Bandwidth, kHz" Foreground="Gray" FontSize="11" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <TextBlock Grid.Column="3" Text="SNR, dB" Foreground="Gray" FontSize="11" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+        </Grid>
+
+        <Grid Grid.Row="2" Margin="0 0 0 6">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="160"/>
+                <ColumnDefinition Width="130"/>
+                <ColumnDefinition Width="130"/>
+                <ColumnDefinition Width="100"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Column="0" Text="🔍" FontSize="14" VerticalAlignment="Center" Margin="4 0"/>
+            <TextBox Grid.Column="1" Margin="4 0"
+                     Text="{Binding FrequencyFilter, UpdateSourceTrigger=PropertyChanged}"
+                     ToolTip="Filter by Frequency (MHz)"/>
+            <TextBox Grid.Column="2" Margin="4 0"
+                     Text="{Binding BandwidthFilter, UpdateSourceTrigger=PropertyChanged}"
+                     ToolTip="Filter by Bandwidth (kHz)"/>
+            <TextBox Grid.Column="3" Margin="4 0"
+                     Text="{Binding SnrFilter, UpdateSourceTrigger=PropertyChanged}"
+                     ToolTip="Filter by SNR (dB)"/>
+        </Grid>
+
+        <DataGrid Grid.Row="3"
+                  ItemsSource="{Binding RecordsView}"
+                  AutoGenerateColumns="False"
+                  IsReadOnly="True"
+                  CanUserSortColumns="True"
+                  CanUserReorderColumns="True"
+                  GridLinesVisibility="Horizontal"
+                  AlternatingRowBackground="#F8F8F8"
+                  HeadersVisibility="Column"
+                  SelectionMode="Single">
+
+            <DataGrid.ColumnHeaderStyle>
+                <Style TargetType="DataGridColumnHeader">
+                    <Setter Property="FontWeight" Value="SemiBold"/>
+                    <Setter Property="Padding" Value="6 4"/>
+                    <Setter Property="Background" Value="#E8E8E8"/>
+                </Style>
+            </DataGrid.ColumnHeaderStyle>
+
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Created On"
+                                    Binding="{Binding Timestamp, Converter={StaticResource TimestampConverter}}"
+                                    Width="165"
+                                    SortMemberPath="Timestamp"/>
+                <DataGridTextColumn Header="Frequency, MHz"
+                                    Binding="{Binding FrequencyMhz, StringFormat=F3}"
+                                    Width="130"
+                                    SortMemberPath="FrequencyMhz"/>
+                <DataGridTextColumn Header="Bandwidth, kHz"
+                                    Binding="{Binding BandwidthKhz, StringFormat=F3}"
+                                    Width="130"
+                                    SortMemberPath="BandwidthKhz"/>
+                <DataGridTextColumn Header="SNR, dB"
+                                    Binding="{Binding Snr, StringFormat=F3}"
+                                    Width="100"
+                                    SortMemberPath="Snr"/>
+                <DataGridTextColumn Header="Count"
+                                    Binding="{Binding Count}"
+                                    Width="80"
+                                    SortMemberPath="Count"/>
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
 </Window>
