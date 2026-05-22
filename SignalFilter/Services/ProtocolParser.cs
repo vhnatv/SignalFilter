@@ -20,10 +20,10 @@ public static class ProtocolParser
     /// </summary>
     public static RawSignal ParsePayload(ReadOnlySpan<byte> data)
     {
-        ulong  timestamp = BitConverter.ToUInt64(data[0..8]);
-        ulong  frequency = BitConverter.ToUInt64(data[8..16]);
-        uint   bandwidth = BitConverter.ToUInt32(data[16..20]);
-        double snr       = BitConverter.ToDouble(data[20..28]);
+        ulong timestamp = BitConverter.ToUInt64(data[0..8]);
+        ulong frequency = BitConverter.ToUInt64(data[8..16]);
+        uint bandwidth = BitConverter.ToUInt32(data[16..20]);
+        double snr = BitConverter.ToDouble(data[20..28]);
         return new RawSignal(timestamp, frequency, bandwidth, snr);
     }
 }

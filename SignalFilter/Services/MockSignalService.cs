@@ -27,8 +27,8 @@ public sealed class MockSignalService : ISignalSource
             int i = _rng.Next(KnownFrequencies.Length);
 
             ulong freq = KnownFrequencies[i] + (ulong)_rng.Next(-2000, 2000);
-            uint  bw   = KnownBandwidths[i];
-            ulong ts   = (ulong)DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+            uint  bw = KnownBandwidths[i];
+            ulong ts = (ulong)DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
             double snr = 12.0 + _rng.NextDouble() * 5.0;
 
             yield return new RawSignal(ts, freq, bw, snr);
