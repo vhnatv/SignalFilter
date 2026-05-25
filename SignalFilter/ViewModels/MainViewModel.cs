@@ -70,15 +70,26 @@ public partial class MainViewModel : ObservableObject
     private async Task StartAsync()
     {
         _cancellToken = new CancellationTokenSource();
+        IsRunning = true;
 
-
-        await foreach (var signal in _source.ReadSignalsAsync(_cancellToken.Token))
+        try
         {
-            _aggregator.Process(signal);
+            await foreach (var signal in _source.ReadSignalsAsync(_cancellToken.Token))
+            {
+                _aggregator.Process(signal);
 
-            var record = _aggregator.Records[^1];
-            if (!Records.Contains(record))
-                Application.Current.Dispatcher.Invoke(() => Records.Add(record));
+                var record = _aggregator.Records[^1];
+                if (!Records.Contains(record))
+                    Application.Current.Dispatcher.Invoke(() => Records.Add(record));
+            }
+        }
+        catch (OperationCanceledException)
+        {
+            // expected when Stop is pressed
+        }
+        finally
+        {
+            IsRunning = false;
         }
     }
 
